@@ -39,6 +39,7 @@ void parse_request(char *raw_request,HttpRequest *request)
     switch(request->request_state)
     {
         case STATE_READ_EMPTY:
+            //TODO: inizialize linked headers list
             request->count_byte = 0;
             request->request_state = STATE_READ_REQUEST_LINE;
             while (*(raw_request + index) != ' ' &&  index < request->read_byte)
@@ -162,7 +163,8 @@ void parse_request(char *raw_request,HttpRequest *request)
 
 
             }
-            
+
+            //TODO  need to check for \r\n\r\n and then only if the method has a body go to body, else work on the responde
             break;
         case STATE_READ_BODY:
             break;
