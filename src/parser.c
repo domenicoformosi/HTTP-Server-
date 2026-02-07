@@ -131,6 +131,7 @@ void parse_request(char *raw_request,HttpRequest *request)
                         *(request->buffer + index) = '\0';
                         request->request_state = STATE_READ_HEADERS;
                         request->protocol = !strcmp(request->buffer,"HTTP/1.1") ? HTTP11 : UNKNOWN_PROTOCOL;
+                        request->count_byte = 0;
                         printf("Changed state: STATE_READ_REQUEST_LINE -> STATE_READ_HEADERS\n");
                         if (index < request->read_byte)
                         {
@@ -141,6 +142,27 @@ void parse_request(char *raw_request,HttpRequest *request)
             }
             break;
         case STATE_READ_HEADERS:
+            index = 0;
+            // TODO: add field length limit
+            while (*(raw_request + index) != ':' && index < request->read_byte)
+            {
+                *(request->buffer + request->count_byte) = *(raw_request + index);
+                index++;
+                request->count_byte++;
+            }
+
+            if (*(raw_request + index) == ':')
+            {
+                *(request->buffer + index) = '\0';
+                // receveid an header name
+                request->headers
+                 = malloc(strlen(request->buffer)+1); // NOT SAFE CHECK STRLEN BEFORE
+                strcpy(request->buffer,request->headers->header);
+
+
+
+            }
+            
             break;
         case STATE_READ_BODY:
             break;

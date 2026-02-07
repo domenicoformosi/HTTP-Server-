@@ -1,3 +1,4 @@
+#include "list.h"
 #define MAX_BUFFER_LEN  4096
 
 #define GET 0
@@ -18,19 +19,6 @@
 
 #define HTTP11 0
 #define UNKNOWN_PROTOCOL -1
-
-typedef struct Header Header;
-
-/*
-    Handle headers as one sided linked list, idk if its ok
-*/
-struct Header
-{
-    char *header;
-    char *value;
-    Header *next;
-};
-
 /*
     Basic form of an http request
 */
@@ -38,7 +26,7 @@ typedef struct
 {
     int method;
     char *resource;
-    Header *headers;
+    list *headers;
     char *body;
     char buffer[MAX_BUFFER_LEN];
     int request_state;
